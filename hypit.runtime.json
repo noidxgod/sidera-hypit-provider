@@ -3,7 +3,7 @@
   "credentials": { "local": { "use": "@hypit/credential-store-local" } },
   "endpoints": {
     "sidera": {
-      "use": "@sidera-ai/hypit-provider",
+      "use": "sidera-hypit-provider",
       "config": { "apiKey": { "store": "local", "key": "sidera" } }
     }
   },

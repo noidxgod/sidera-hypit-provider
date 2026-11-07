@@ -4,7 +4,7 @@ import { canonicalize, defineEndpoint, wakeAfter } from "@hypit/hypit/endpoint";
 import { generationTypes, sealGeneratedImageSet, sealGeneratedVideoSet } from "@hypit/generation";
 import { MODELS, capabilityKey, client, lifecycle, support, toSidera } from "./sidera.js";
 
-export const providerModule = { name: "@sidera-ai/hypit-provider", version: "1" };
+export const providerModule = { name: "sidera-hypit-provider", version: "1" };
 
 const capabilityOf = key => { const [mod, name] = key.split("#"), at = mod.lastIndexOf("@"); return { module: { name: mod.slice(0, at), version: mod.slice(at + 1) }, name }; };
 const ports = need => need.constraints?.ports ?? {};

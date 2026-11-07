@@ -1,4 +1,4 @@
-# @sidera-ai/hypit-provider
+# sidera-hypit-provider
 
 Sidera as a model service for [Hypit](https://github.com/hypit-ai/hypit): Seedance 2 / 2.5, GPT Image 2 and
 Nano Banana generated through your [Sidera](https://sidera-ai.ru) balance — rubles, Russian cards and SBP,
@@ -19,7 +19,7 @@ no subscription, charged only for successful results.
 
 1. Sign in at [sidera-ai.ru](https://sidera-ai.ru), open Профиль → «API и MCP» and create a key (a daily limit
    is recommended for agents). Top up the balance.
-2. In the Hypit video project: `npm install @sidera-ai/hypit-provider`
+2. In the Hypit video project: `npm install sidera-hypit-provider`
 3. Merge `endpoints` and `bindings` from this package's `hypit.runtime.json` into the project's Runtime
    Profile (bind only the models you want served by Sidera).
 4. `hypit auth login sidera` — enter the key into the credential store. Never paste the key into the chat.
