@@ -1,0 +1,51 @@
+{
+  "name": "@sidera-ai/hypit-provider",
+  "version": "0.1.0",
+  "description": "Sidera for Hypit: Seedance 2 / 2.5, GPT Image 2 and Nano Banana through your Sidera balance (rubles, Russian cards).",
+  "type": "module",
+  "license": "Apache-2.0",
+  "homepage": "https://sidera-ai.ru/docs/hypit",
+  "keywords": [
+    "hypit",
+    "hypit-provider",
+    "seedance",
+    "gpt-image",
+    "nano-banana",
+    "sidera"
+  ],
+  "hypit": {
+    "activation": "./src/activation.js"
+  },
+  "exports": {
+    ".": "./src/provider.js",
+    "./sidera": "./src/sidera.js"
+  },
+  "files": [
+    "src",
+    "hypit.runtime.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.15.0"
+  },
+  "scripts": {
+    "test": "node --test test/sidera.test.js"
+  },
+  "peerDependencies": {
+    "@hypit/hypit": ">=0.3.1 <0.4"
+  },
+  "devDependencies": {
+    "@hypit/hypit": "0.3.1"
+  },
+  "dependencies": {
+    "@hypit/generation": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noidxgod/sidera-hypit-provider.git"
+  },
+  "bugs": {
+    "url": "https://github.com/noidxgod/sidera-hypit-provider/issues"
+  }
+}

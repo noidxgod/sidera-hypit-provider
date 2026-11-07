@@ -1,0 +1,19 @@
+{
+  "format": "hypit.runtime-local@1",
+  "credentials": { "local": { "use": "@hypit/credential-store-local" } },
+  "endpoints": {
+    "sidera": {
+      "use": "@sidera-ai/hypit-provider",
+      "config": { "apiKey": { "store": "local", "key": "sidera" } }
+    }
+  },
+  "bindings": {
+    "@hypit/seedance@1#seedance-2": "sidera",
+    "@hypit/seedance@1#seedance-2-fast": "sidera",
+    "@hypit/seedance@1#seedance-2-mini": "sidera",
+    "@hypit/seedance@1#seedance-2.5": "sidera",
+    "@hypit/gpt-image@1#gpt-image-2": "sidera",
+    "@hypit/nano-banana@1#nano-banana-2": "sidera",
+    "@hypit/nano-banana@1#nano-banana-pro": "sidera"
+  }
+}
