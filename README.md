@@ -22,7 +22,7 @@ no subscription, charged only for successful results.
 2. In the Hypit video project: `npm install sidera-hypit-provider`
 3. Merge `endpoints` and `bindings` from this package's `hypit.runtime.json` into the project's Runtime
    Profile (bind only the models you want served by Sidera).
-4. `hypit auth login sidera` — enter the key into the credential store. Never paste the key into the chat.
+4. `hypit auth login sidera` — paste the key once (the input is hidden) into the credential store. Never paste the key into the chat.
 
 ## How it works
 

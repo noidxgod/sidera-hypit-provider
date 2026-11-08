@@ -1,6 +1,6 @@
 {
   "name": "sidera-hypit-provider",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Sidera for Hypit: Seedance 2 / 2.5, GPT Image 2 and Nano Banana through your Sidera balance (rubles, Russian cards).",
   "type": "module",
   "license": "Apache-2.0",

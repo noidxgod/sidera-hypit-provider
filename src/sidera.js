@@ -15,6 +15,24 @@ export const MODELS = {
   "@hypit/nano-banana@1#nano-banana-2":   { kind: "image", text: "nano-banana-2", withImages: "nano-banana-2", imagesField: "image_input", maxImages: 10 },
   "@hypit/nano-banana@1#nano-banana-pro": { kind: "image", text: "nano-banana-pro", withImages: "nano-banana-pro", imagesField: "image_input", maxImages: 8 },
 };
+// A Sidera key is "sdr_" + 48 hex characters. A hidden prompt makes repeated pastes easy to miss,
+// so a malformed key is refused here with a clear message instead of a 401 from the API.
+export function checkKey(value) {
+  const key = typeof value === "string" ? value.trim() : "";
+  if (!key) throw new Error("Sidera API key is missing: create one at https://sidera-ai.ru → Профиль → «API и MCP», then run: hypit auth login sidera");
+  if (/^sdr_[0-9a-f]{48}$/u.test(key)) return key;
+  const copies = key.split("sdr_").length - 1;
+  throw new Error(copies > 1
+    ? `The stored Sidera API key contains ${copies} keys (pasted ${copies} times). Run hypit auth login sidera again and paste it once.`
+    : "The stored Sidera API key is not a Sidera key (expected sdr_ followed by 48 characters). Run hypit auth login sidera again.");
+}
+// Sidera accepts Idempotency-Key up to 100 characters of [A-Za-z0-9._:-]; Hypit operation ids are
+// longer and freer, so the key is a stable SHA-256 of the id: the same operation keeps the same key.
+export async function idempotencyKey(id) {
+  if (id === undefined || id === null || id === "") return undefined;
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(id))));
+  return "hypit:" + Array.from(digest, b => b.toString(16).padStart(2, "0")).join("");
+}
 export const capabilityKey = c => `${c.module.name}@${c.module.version}#${c.name}`;
 const first = (ports, name) => ports[name]?.[0];
 const media = (ports, name) => (ports[name] || []).filter(v => v && typeof v === "object" && v.artifact);

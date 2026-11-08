@@ -1,10 +1,20 @@
 {
   "format": "hypit.runtime-local@1",
-  "credentials": { "local": { "use": "@hypit/credential-store-local" } },
+  "dataRoot": ".hypit/execution",
+  "credentials": {
+    "local": {
+      "use": "@hypit/credential-store-local"
+    }
+  },
   "endpoints": {
     "sidera": {
       "use": "sidera-hypit-provider",
-      "config": { "apiKey": { "store": "local", "key": "sidera" } }
+      "config": {
+        "apiKey": {
+          "store": "local",
+          "key": "sidera"
+        }
+      }
     }
   },
   "bindings": {

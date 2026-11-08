@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { MODELS, support, toSidera, client, lifecycle } from "../src/sidera.js";
+import { MODELS, support, toSidera, client, lifecycle, checkKey, idempotencyKey } from "../src/sidera.js";
 
 const img = (n = 1) => Array.from({ length: n }, (_, i) => ({ role: "reference", artifact: { kind: "blob", resource: "r" + i, size: 1, mediaType: "image/png" } }));
 const vid = () => [{ role: "reference", artifact: { kind: "blob", resource: "v", size: 1, mediaType: "video/mp4" } }];
@@ -46,4 +46,20 @@ test("lifecycle: pending, failed (refunded), ready with result links", () => {
   assert.equal(lifecycle({ id: "g", status: "failed" }).state, "failed");
   assert.deepEqual(lifecycle({ id: "g", status: "succeeded", media: ["https://sidera-ai.ru/m/1"] }), { state: "ready", urls: ["https://sidera-ai.ru/m/1"] });
   assert.throws(() => lifecycle({ id: "g", status: "succeeded", media: [] }), /without a result/);
+});
+
+test("checkKey accepts one Sidera key and explains repeated or foreign keys", () => {
+  const key = "sdr_" + "a1".repeat(24);
+  assert.equal(checkKey(` ${key}\n`), key);
+  assert.throws(() => checkKey(key.repeat(4)), /contains 4 keys \(pasted 4 times\)/);
+  assert.throws(() => checkKey("sk-other-123"), /not a Sidera key/);
+  assert.throws(() => checkKey(undefined), /missing/);
+});
+
+test("idempotencyKey is stable, short and uses only characters Sidera accepts", async () => {
+  const id = "op_" + "x/".repeat(200) + "#need:1@seedance";
+  const a = await idempotencyKey(id), b = await idempotencyKey(id);
+  assert.equal(a, b); assert.ok(a.length <= 100); assert.match(a, /^[A-Za-z0-9._:-]+$/);
+  assert.notEqual(a, await idempotencyKey(id + "2"));
+  assert.equal(await idempotencyKey(undefined), undefined);
 });

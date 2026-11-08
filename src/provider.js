@@ -2,7 +2,7 @@
 // Lifecycle per the Hypit Endpoint SDK: start (upload references, submit) → poll → collect.
 import { canonicalize, defineEndpoint, wakeAfter } from "@hypit/hypit/endpoint";
 import { generationTypes, sealGeneratedImageSet, sealGeneratedVideoSet } from "@hypit/generation";
-import { MODELS, capabilityKey, client, lifecycle, support, toSidera } from "./sidera.js";
+import { MODELS, capabilityKey, checkKey, client, idempotencyKey, lifecycle, support, toSidera } from "./sidera.js";
 
 export const providerModule = { name: "sidera-hypit-provider", version: "1" };
 
@@ -12,11 +12,7 @@ const ports = need => need.constraints?.ports ?? {};
 export function createSideraProvider(options) {
   const api = client({ baseUrl: options.baseUrl, fetch: options.fetch });
   const interval = options.pollIntervalMs ?? 5_000;
-  const secret = credentials => {
-    const value = credentials.apiKey?.secret;
-    if (typeof value !== "string" || !value) throw new Error("Sidera API key is missing: create one at https://sidera-ai.ru → Профиль → «API и MCP»");
-    return value;
-  };
+  const secret = credentials => checkKey(credentials.apiKey?.secret);
   const endpointFor = (key, kind) => ({
     async start(context) {
       const checked = support(key, ports(context.need));
@@ -30,7 +26,7 @@ export function createSideraProvider(options) {
       });
       await context.reportProgress?.({ phase: `Submitting to Sidera: ${request.model}` });
       // The operation id makes a retried submission return the same Sidera generation (no double charge).
-      const started = await api.generate(apiKey, request, context.operation?.id ?? context.need?.id);
+      const started = await api.generate(apiKey, request, await idempotencyKey(context.operation?.id ?? context.need?.id));
       const handle = { id: started.id }, receipt = { id: started.id, priceRub: started.price_rub };
       await context.checkpoint?.({ handle, receipt });
       return { ...wakeAfter(handle, interval), receipt };
